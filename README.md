@@ -18,9 +18,11 @@ The goal of this work is to enhance image quality in precision agriculture by le
   ```
 - 🔍 **inference/** — Contains inference and evaluation scripts.
 Includes a log/ folder with reported experimental results.
+
 Pretrained checkpoints can be downloaded directly from this folder or from the link below.
 
 🧠 Pretrained Models and Checkpoints
+
 Download pretrained super-resolution models from:
 
 [👉 Download Checkpoints](https://drive.google.com/drive/folders/1dLSxTwEyA8oP7H10xSxn_U3P_h33qQli?usp=sharing)
@@ -28,10 +30,15 @@ Download pretrained super-resolution models from:
 After downloading, place the files as follows:
 
 project-root/
+
 ├── training/
+
 │   └── run.sh
+
 ├── inference/
+
 │   ├── log/
+
 │   └── [downloaded_checkpoints_here]
 
 🧬 Dataset Information
