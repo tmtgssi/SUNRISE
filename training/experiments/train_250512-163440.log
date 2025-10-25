@@ -1,0 +1,281 @@
+25-05-12 16:34:40.851 - INFO: Resuming training from epoch: 500, iter: 100000.
+25-05-12 16:34:40.852 - WARNING: pretrain_model path will be ignored when resuming training.
+25-05-12 16:34:40.852 - INFO: Set [pretrain_model_G] to ./experiments/WGSR_1level/models/100000_G.pth
+25-05-12 16:34:40.852 - INFO: Set [pretrain_model_D] to ./experiments/WGSR_1level/models/100000_D.pth
+25-05-12 16:34:40.852 - INFO:   name: WGSR_1level
+  use_tb_logger: True
+  model: srragan
+  scale: 4
+  gpu_ids: [0]
+  datasets:[
+    train:[
+      name: Saffron
+      mode: LRHRHM
+      dataroot_HR_HM: ./classical_SR_datasets/DIV2K_train_HR_saliency/
+      dataroot_HR: ./classical_SR_datasets/DIV2K_train_HR/
+      dataroot_LR: ./classical_SR_datasets/DIV2K_train_LR_bicubic_X4_renamed/
+      subset_file: None
+      use_shuffle: True
+      n_workers: 6
+      batch_size: 4
+      HR_size: 128
+      use_flip: True
+      use_rot: True
+      phase: train
+      scale: 4
+      data_type: img
+    ]
+    val:[
+      name: val_Saffron
+      mode: LRHRHM
+      dataroot_HR_HM: ./classical_SR_datasets/DIV2K_valid_HR_saliency/
+      dataroot_HR: ./classical_SR_datasets/DIV2K_valid_HR/
+      dataroot_LR: ./classical_SR_datasets/DIV2K_valid_LR_bicubic_X4_renamed/
+      phase: val
+      scale: 4
+      data_type: img
+    ]
+  ]
+  path:[
+    root: ./
+    pretrain_model_G: ./experiments/WGSR_1level/models/100000_G.pth
+    resume_state: ./100000.state
+    experiments_root: ./experiments/WGSR_1level
+    models: ./experiments/WGSR_1level/models
+    training_state: ./experiments/WGSR_1level/training_state
+    log: ./experiments/WGSR_1level
+    val_images: ./experiments/WGSR_1level/val_images
+    pretrain_model_D: ./experiments/WGSR_1level/models/100000_D.pth
+  ]
+  network_G:[
+    which_model_G: RRDB_net
+    norm_type: None
+    mode: CNA
+    nf: 64
+    nb: 23
+    in_nc: 3
+    out_nc: 3
+    gc: 32
+    group: 1
+    scale: 4
+  ]
+  network_D:[
+    which_model_D: discriminator_vgg_128
+    norm_type: batch
+    act_type: leakyrelu
+    mode: CNA
+    nf: 64
+    in_nc: 3
+  ]
+  train:[
+    lr_G: 0.0001
+    weight_decay_G: 0
+    beta1_G: 0.9
+    lr_D: 0.0005
+    weight_decay_D: 0
+    beta1_D: 0.9
+    lr_scheme: MultiStepLR
+    lr_steps: [50000, 100000, 200000, 300000]
+    lr_gamma: 0.5
+    wavelet_filter: sym7
+    wavelet_level: 1
+    pixel_criterion: l1
+    pixel_weight: 0.1
+    pixel_weight_lh: 0.01
+    pixel_weight_hl: 0.01
+    pixel_weight_hh: 0.05
+    _comment:: if wavelet decomposition level is 2, set the following 3 variables, else keep them as zero, also in_nc (line 50) must set to 6
+    pixel_weight_lh2: 0
+    pixel_weight_hl2: 0
+    pixel_weight_hh2: 0
+    feature_criterion: l1
+    feature_weight: 1
+    gan_type: vanilla
+    gan_weight: 0.005
+    manual_seed: 0
+    niter: 20001
+    val_freq: 5000
+  ]
+  logger:[
+    print_freq: 5000
+    save_checkpoint_freq: 5000
+  ]
+  is_train: True
+
+25-05-12 16:34:40.880 - INFO: Random seed: 0
+25-05-12 16:34:40.887 - INFO: Dataset [LRHRHMDataset - Saffron] is created.
+25-05-12 16:34:40.888 - INFO: Number of train images: 800, iters: 200
+25-05-12 16:34:40.888 - INFO: Total epochs needed: 101 for iters 20,001
+25-05-12 16:34:40.888 - INFO: Dataset [LRHRHMDataset - val_Saffron] is created.
+25-05-12 16:34:40.888 - INFO: Number of val images in [val_Saffron]: 100
+25-05-12 16:34:41.354 - INFO: Initialization method [kaiming]
+25-05-12 16:34:46.890 - INFO: Initialization method [kaiming]
+25-05-12 16:34:47.195 - INFO: Loading pretrained model for G [./experiments/WGSR_1level/models/100000_G.pth] ...
+25-05-12 16:34:47.366 - INFO: Loading pretrained model for D [./experiments/WGSR_1level/models/100000_D.pth] ...
+25-05-12 16:34:48.735 - INFO: Network G structure: DataParallel - RRDBNet, with parameters: 16,736,646
+25-05-12 16:34:48.735 - INFO: RRDBNet(
+  (feature_extraction): Sequential(
+    (0): Sequential(
+      (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+  )
+  (residual_blocks): ModuleList(
+    (0-22): 23 x RRDB(
+      (RDB1): ResidualDenseBlock_5C(
+        (conv1): Sequential(
+          (0): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+        )
+        (conv2): Sequential(
+          (0): Conv2d(96, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+        )
+        (conv3): Sequential(
+          (0): Conv2d(128, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+        )
+        (conv4): Sequential(
+          (0): Conv2d(160, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+        )
+        (conv5): Sequential(
+          (0): Conv2d(192, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        )
+      )
+      (RDB2): ResidualDenseBlock_5C(
+        (conv1): Sequential(
+          (0): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+        )
+        (conv2): Sequential(
+          (0): Conv2d(96, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+        )
+        (conv3): Sequential(
+          (0): Conv2d(128, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+        )
+        (conv4): Sequential(
+          (0): Conv2d(160, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+        )
+        (conv5): Sequential(
+          (0): Conv2d(192, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        )
+      )
+      (RDB3): ResidualDenseBlock_5C(
+        (conv1): Sequential(
+          (0): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+        )
+        (conv2): Sequential(
+          (0): Conv2d(96, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+        )
+        (conv3): Sequential(
+          (0): Conv2d(128, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+        )
+        (conv4): Sequential(
+          (0): Conv2d(160, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.2, inplace=True)
+        )
+        (conv5): Sequential(
+          (0): Conv2d(192, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        )
+      )
+    )
+  )
+  (lr_conv): Sequential(
+    (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  )
+  (upsampler): Sequential(
+    (0): Sequential(
+      (0): Upsample(scale_factor=2.0, mode='nearest')
+      (1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (2): LeakyReLU(negative_slope=0.2, inplace=True)
+    )
+    (1): Sequential(
+      (0): Upsample(scale_factor=2.0, mode='nearest')
+      (1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (2): LeakyReLU(negative_slope=0.2, inplace=True)
+    )
+  )
+  (hr_conv0): Sequential(
+    (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): LeakyReLU(negative_slope=0.2, inplace=True)
+  )
+  (hr_conv1): Sequential(
+    (0): Conv2d(64, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  )
+  (hr_conv2): Sequential(
+    (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): LeakyReLU(negative_slope=0.2, inplace=True)
+  )
+  (hr_conv3): Sequential(
+    (0): Conv2d(64, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  )
+)
+25-05-12 16:34:48.736 - INFO: Network D structure: DataParallel - Discriminator_VGG_128, with parameters: 14,502,281
+25-05-12 16:34:48.736 - INFO: Discriminator_VGG_128(
+  (features): Sequential(
+    (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): LeakyReLU(negative_slope=0.2, inplace=True)
+    (2): Conv2d(64, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (3): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): LeakyReLU(negative_slope=0.2, inplace=True)
+    (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (6): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (7): LeakyReLU(negative_slope=0.2, inplace=True)
+    (8): Conv2d(128, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (9): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (10): LeakyReLU(negative_slope=0.2, inplace=True)
+    (11): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (12): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (13): LeakyReLU(negative_slope=0.2, inplace=True)
+    (14): Conv2d(256, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (15): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (16): LeakyReLU(negative_slope=0.2, inplace=True)
+    (17): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (18): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (19): LeakyReLU(negative_slope=0.2, inplace=True)
+    (20): Conv2d(512, 512, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (21): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (22): LeakyReLU(negative_slope=0.2, inplace=True)
+    (23): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (24): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (25): LeakyReLU(negative_slope=0.2, inplace=True)
+    (26): Conv2d(512, 512, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (27): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (28): LeakyReLU(negative_slope=0.2, inplace=True)
+  )
+  (classifier): Sequential(
+    (0): Linear(in_features=8192, out_features=100, bias=True)
+    (1): LeakyReLU(negative_slope=0.2, inplace=True)
+    (2): Linear(in_features=100, out_features=1, bias=True)
+  )
+)
+25-05-12 16:34:48.736 - INFO: Model [SRRaGANModel] is created.
+25-05-12 16:34:48.744 - INFO: Start training from epoch: 1, iter: 1
+25-05-12 16:53:29.532 - INFO: <epoch: 25, iter:   5,000, lr:2.500e-05> l_g_pix: 2.2409e-01 l_g_pix_hm: 3.1475e-01 l_g_fea: 7.3738e-04 l_g_fea_hm: 6.9357e-03 l_g_gan: 4.7246e-02 l_g_gan_hm: 1.4803e-02 l_d_real: 8.1012e-05 l_d_fake: 7.9155e-05 l_d_real_hm: 5.5023e-02 l_d_fake_hm: 5.3372e-02 D_real: 1.0436e+01 D_fake: 9.8725e-01 D_real_hm: -1.0328e+00 D_fake_hm: -3.9392e+00 
+25-05-12 16:59:54.629 - INFO: # Validation # PSNR: 2.7874e+01
+25-05-12 16:59:54.630 - INFO: # Validation # PSNR: 2.7443e+01
+25-05-12 16:59:54.630 - INFO: <epoch: 25, iter:   5,000> psnr: 2.7874e+01
+25-05-12 16:59:54.630 - INFO: Saving models and training states.
+25-05-12 17:18:25.696 - INFO: <epoch: 50, iter:  10,000, lr:2.500e-05> l_g_pix: 4.1218e-01 l_g_pix_hm: 2.2598e-01 l_g_fea: 2.3092e-03 l_g_fea_hm: 9.7659e-04 l_g_gan: 8.8305e-02 l_g_gan_hm: 4.0817e-02 l_d_real: 2.1773e-08 l_d_fake: 0.0000e+00 l_d_real_hm: 2.8585e-04 l_d_fake_hm: 2.8491e-04 D_real: 3.4688e+01 D_fake: 1.7027e+01 D_real_hm: 9.2924e+00 D_fake_hm: 1.1293e+00 
+25-05-12 17:29:17.018 - INFO: # Validation # PSNR: 2.7555e+01
+25-05-12 17:29:17.018 - INFO: # Validation # PSNR: 2.6998e+01
+25-05-12 17:29:17.018 - INFO: <epoch: 50, iter:  10,000> psnr: 2.7555e+01
+25-05-12 17:29:17.019 - INFO: Saving models and training states.
+25-05-12 17:47:47.330 - INFO: <epoch: 75, iter:  15,000, lr:2.500e-05> l_g_pix: 4.3661e-01 l_g_pix_hm: 2.5208e-01 l_g_fea: 2.0220e-03 l_g_fea_hm: 1.2814e-03 l_g_gan: 6.1015e-02 l_g_gan_hm: 2.9989e-02 l_d_real: 5.1073e-06 l_d_fake: 5.2452e-06 l_d_real_hm: 2.5676e-03 l_d_fake_hm: 2.6040e-03 D_real: 2.3821e+01 D_fake: 1.1618e+01 D_real_hm: 5.9135e+00 D_fake_hm: -8.1672e-02 
+25-05-12 17:56:08.665 - INFO: # Validation # PSNR: 2.7918e+01
+25-05-12 17:56:08.666 - INFO: # Validation # PSNR: 2.7094e+01
+25-05-12 17:56:08.666 - INFO: <epoch: 75, iter:  15,000> psnr: 2.7918e+01
+25-05-12 17:56:08.666 - INFO: Saving models and training states.
+25-05-12 18:14:42.268 - INFO: <epoch:100, iter:  20,000, lr:2.500e-05> l_g_pix: 4.4646e-01 l_g_pix_hm: 2.7439e-01 l_g_fea: 2.2693e-03 l_g_fea_hm: 1.8683e-03 l_g_gan: 8.5792e-02 l_g_gan_hm: 6.2404e-02 l_d_real: 3.7100e-08 l_d_fake: 0.0000e+00 l_d_real_hm: 3.8652e-06 l_d_fake_hm: 4.0531e-06 D_real: 3.3337e+01 D_fake: 1.6178e+01 D_real_hm: 1.3855e+01 D_fake_hm: 1.3743e+00 
+25-05-12 18:22:56.534 - INFO: # Validation # PSNR: 2.7884e+01
+25-05-12 18:22:56.534 - INFO: # Validation # PSNR: 2.6854e+01
+25-05-12 18:22:56.534 - INFO: <epoch:100, iter:  20,000> psnr: 2.7884e+01
+25-05-12 18:22:56.535 - INFO: Saving models and training states.
+25-05-12 18:22:57.479 - INFO: Saving the final model.
+25-05-12 18:22:57.660 - INFO: End of training.
