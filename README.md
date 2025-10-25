@@ -63,6 +63,7 @@ We recommend using a Python virtual environment (conda or venv).
 Install all dependencies via:
 
  ```bash
+cd inference
 pip install -r requirements.txt
  ```
 
