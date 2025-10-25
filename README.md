@@ -15,6 +15,7 @@ The goal of this work is to enhance image quality in precision agriculture by le
   ```bash
   cd training
   bash run_train.sh
+  ```
 🔍 inference/ — Contains inference and evaluation scripts.
 Includes a log/ folder with reported experimental results.
 Pretrained checkpoints can be downloaded directly from this folder or from the link below.
@@ -25,8 +26,6 @@ Download pretrained super-resolution models from:
 
 After downloading, place the files as follows:
 
-arduino
-Copy code
 project-root/
 ├── training/
 │   └── run.sh
@@ -49,25 +48,27 @@ We recommend using a Python virtual environment (conda or venv).
 
 🐍 Required Dependencies
 Install all dependencies via:
-
-bash
-Copy code
+ ```bash
 pip install -r requirements.txt
+ ```
+
 🚀 How to Run
 ✅ 1. Train the Model
 Run the training script:
 
-bash
-Copy code
+ ```bash
 cd training
 bash run.sh
+ ```
+
 🔬 2. Inference and Evaluation
 Navigate to the inference folder and execute:
 
-bash
-Copy code
+ ```bash
 cd inference
 bash run_SR.sh
+ ```
+
 📧 Contact
 For any questions, issues, or collaboration inquiries, please contact:
 
