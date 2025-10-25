@@ -11,13 +11,8 @@ The goal of this work is to enhance image quality in precision agriculture by le
 ## 📂 Repository Structure
 
 - 🏋️ **training/** — Contains scripts and configuration files for model training.  
-  To start training, run the bash script:
-  ```bash
-  cd training
-  bash run_train.sh
-  ```
+
 - 🔍 **inference/** — Contains inference and evaluation scripts.
-Includes a log/ folder with reported experimental results.
 
 Pretrained checkpoints can be downloaded directly from this folder or from the link below.
 
